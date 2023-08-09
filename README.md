@@ -27,3 +27,9 @@ docker-compose up -d
 ```
 npm run start:dev
 ```
+
+7. Execute SEED
+
+```
+http://localhost:4000/api/seed
+```
