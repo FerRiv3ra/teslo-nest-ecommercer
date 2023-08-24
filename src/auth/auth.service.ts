@@ -12,7 +12,7 @@ import * as bcrypt from 'bcrypt';
 
 import { User } from './entities/user.entity';
 import { CreateUserDto, LoginUserDto } from './dto';
-import { JwtPayload } from './intefaces/jwt-payload.interface';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -38,7 +38,7 @@ export class AuthService {
 
       await this.userRepository.save(user);
 
-      return { ...user, token: this.getJwtToken({ email: user.email }) };
+      return { ...user, token: this.getJwtToken({ id: user.id }) };
     } catch (error) {
       this.handleDBExceptions(error);
     }
@@ -49,7 +49,7 @@ export class AuthService {
 
     const user = await this.userRepository.findOne({
       where: { email },
-      select: { email: true, password: true },
+      select: { email: true, password: true, id: true },
     });
 
     if (!user) {
@@ -59,7 +59,11 @@ export class AuthService {
     if (!bcrypt.compareSync(password, user.password)) {
       throw new UnauthorizedException('Not valid credentials');
     }
-    return { ...user, token: this.getJwtToken({ email: user.email }) };
+    return { email, token: this.getJwtToken({ id: user.id }) };
+  }
+
+  tokenLogin(user: User) {
+    return { ...user, token: this.getJwtToken({ id: user.id }) };
   }
 
   private getJwtToken(payload: JwtPayload) {
