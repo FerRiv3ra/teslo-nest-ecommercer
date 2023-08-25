@@ -5,7 +5,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './decorators/get-user.decorator';
 import { User } from './entities/user.entity';
 import { Auth } from './decorators';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -20,6 +22,7 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
+  @ApiBearerAuth()
   @Get('token-login')
   @Auth()
   checkAuthToken(@GetUser() user: User) {

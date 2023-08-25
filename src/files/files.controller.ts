@@ -13,10 +13,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 import { diskStorage } from 'multer';
 import { fileNamer, fileFilter } from './helpers';
-import { ParseUUIDFileExtension } from './pipes/parse-uuid.pipe';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Files - Get & Upload')
 @Controller('files')
 export class FilesController {
   constructor(
